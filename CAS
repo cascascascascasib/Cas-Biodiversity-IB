@@ -1,0 +1,141 @@
+
+from os import environ
+environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+
+import random
+from random import randint
+
+import pygame
+from pygame import *
+
+q1 = input("r: ")
+q1b = "a"
+q1c = "a"
+
+u = open("receipt", "a")
+u.truncate(0)
+if " " in q1:
+    q1a = q1.split(" ")[0]
+    q1b = q1.split(" ")[1]
+
+    if " " in q1b:
+        q1b = q1b.split(" ")[0]
+        q1c = q1b.split(" ")[1]
+
+else:
+    q1a = q1
+
+print(q1a,q1b,q1c)
+
+q2 = input("b: ")
+q2b = "a"
+q2c = "a"
+
+if " " in q2:
+    q2a = q2.split(" ")[0]
+    q2b = q2.split(" ")[1]
+
+    if " " in q2b:
+        q2b = q2b.split(" ")[0]
+        q2c = q2b.split(" ")[1]
+else:
+    q2a = q2
+
+print(q2a,q2b,q2c)
+
+
+q3 = input("y: ")
+print(q3)
+
+pygame.init()
+
+display_width = 1200 # 1200 for full
+display_height = 615
+
+window = pygame.display.set_mode((display_width, display_height))
+pygame.display.set_caption('Forest')
+area = pygame.image.load('mustavuori.png')
+icon = pygame.image.load('icon.png')
+
+pygame.display.set_icon(icon)
+
+black = (0, 0, 0)
+white = (255, 255, 255)
+
+clock = pygame.time.Clock()
+closed = False
+
+def map(x, y):
+    window.blit(area, (x, y))
+
+x = (display_width * 0)
+y = (display_height * 0)
+
+
+receipt = open("receipt", 'a')
+
+while not closed:
+    for e in pygame.event.get():
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_s:
+            print(pygame.mouse.get_pos())
+        if e.type == pygame.QUIT:
+            closed = True
+
+    window.fill(white)
+    map(x, y)
+
+    #mimi
+
+    book = open("master.txt", 'r')
+    book = book.read().split("-")
+    for data in book:
+        items = data.split("/")
+        for i in items:
+            if q1a == i and q1b in items and q1c in items:
+                try:
+                    receipt.write(data + "\n")
+                except:
+                    mimi="mimi"
+                receipt.close()
+                px = int(items[-3])
+                py = int(items[-2])
+                pygame.draw.rect(window, (255, 255, 255),
+                                 pygame.Rect(px - 5, py - 5, 10, 10))
+
+                color = (255, 20, 20)
+                if "legacy" in items:
+                    color = (100,100,100)
+
+
+                pygame.draw.rect(window, (255, 20, 20),
+                                 pygame.Rect(px-4, py-4, 8, 8))
+            if q2a == i and q2b in items and q2c in items:
+                px = int(items[-3])
+                py = int(items[-2])
+                pygame.draw.rect(window, (255, 255, 255),
+                                 pygame.Rect(px - 5, py - 5, 10, 10))
+
+                color = (20, 20, 255)
+                if "legacy" in items:
+                    color = (100,100,100)
+
+                pygame.draw.rect(window, color,
+                                 pygame.Rect(px-4, py-4, 8, 8))
+         #   if q3 == i:
+          ##     py = int(items[-2])
+         #       pygame.draw.rect(window, (255, 255, 255),
+          #                       pygame.Rect(px - 5, py - 5, 10, 10))
+            #    color = (230, 150, 0)
+           #     if "legacy" in items:
+           #         color = (100,100,100)
+#
+          #      pygame.draw.rect(window, color,
+           #                      pygame.Rect(px - 4, py - 4, 8, 8))
+
+
+
+    pygame.display.update()
+    clock.tick(60)
+
+pygame.quit()
+quit()
